@@ -18,6 +18,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+// import jdk.jfr.internal.OldObjectSample;
+
 import java.io.*;
 
 public class Painting extends JPanel implements ActionListener {
@@ -26,7 +28,11 @@ public class Painting extends JPanel implements ActionListener {
     /** you can change the variable SEED if you like
      *  the same program with the same SEED will generate exactly the same sequence of pictures
      */
-    final static long SEED = 37; // seed for the random number generator; any number works
+
+    
+    final static Random number = new Random();
+    final static long num1 = number.nextInt(1000);           // ?????????????????????????????????????????????????????????????????????
+    final static long SEED = num1; // seed for the random number generator; any number works
 
     /** do not change the following two lines **/
     final static Random random = new Random( SEED ); // random generator to be used by all classes
@@ -39,7 +45,7 @@ public class Painting extends JPanel implements ActionListener {
     String filename = "randomshot_"; // prefix
     
    /*---- Dinguses ----*/
-    ArrayList<Dingus> shapes;
+    ArrayList<Dingus> shapes = new ArrayList<Dingus>();
     //...
 
     public Painting() {
@@ -50,8 +56,22 @@ public class Painting extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) { // draw all your shapes
         super.paintComponent(g);     // clears the panel
+
         // draw all shapes
         // TODO
+
+        for (int i = 0; i < shapes.size(); i++) {
+
+            shapes.get(i).draw(g);
+
+        }
+
+            // shapes.get(0).draw(g);
+            // shapes.get(1).draw(g);
+            // shapes.get(2).draw(g);
+            // // shapes.get(3).draw(g);
+
+
     }
 
     /**
@@ -71,10 +91,57 @@ public class Painting extends JPanel implements ActionListener {
         numberOfRegenerates++; // do not change
         
         // clear the shapes list
-        // TODO
+        shapes.clear();
 
         // create random shapes
-        // TODO
+        //Generate random number of shapes on painting between 10 and 30 inclusive
+        int numShape = (int) Math.floor(Math.random()*(30-10+1)+10);
+
+        //Array that contains a list of all the sub classes of Dingus
+        // ArrayList<Dingus> shapes = new ArrayList<Dingus>();
+        Dingus[] subClasses = new Dingus[4];
+        CircleDingus cd = new CircleDingus(800, 450);
+        TreeDingus td = new TreeDingus(800, 450);
+        // IceCreamDingus id = new IceCreamDingus(800, 450);
+        RectangleDingus rd = new RectangleDingus(800, 450);
+        TriangleDingus ttd = new TriangleDingus(800, 450);
+        // if time left over , do traffic dingus
+        // ovalDingus od = new ovalDingus(800, 450);
+        subClasses[0] = cd;
+        subClasses[1] = td;
+        // subClasses[2] = id;
+        subClasses[2] = rd;
+        subClasses[3] = ttd;
+        // subClasses[5] = od;
+
+        // for (int i = 0; i < 3; i++ ) {
+
+        //     //random number used to choose one out of the 5 random dingus subclasses
+        //     int numDingus = (int) Math.floor(Math.random()*(3-0+1)+0);
+        //     //adds the shape to the arraylist shapes
+        //     // shapes.add(subClasses[0]);
+        //     // shapes.add(subClasses[1]);
+        //     // shapes.add(subClasses[2]);
+        //     // shapes.add(subClasses[3]);
+
+        //     shapes.add(subClasses[i]);
+   
+        // }
+        shapes.add(subClasses[1]);
+        shapes.add(subClasses[1]);
+        shapes.add(subClasses[2]);
+        // shapes.add(subClasses[3]);
+        shapes.add(subClasses[0]);
+        shapes.add(subClasses[2]);
+
+
+
+        
+
+        //use random number to draw a random shape from shapes list. shapes.get(i).draw(g)
+        //add shape to the panel to make a "drawing".
+
+
     }
 
     /** 
@@ -103,7 +170,7 @@ public class Painting extends JPanel implements ActionListener {
         
         try {
             ImageIO.write(image, "PNG", new File(name+".png"));
-            System.out.println( "Saved screenshot as "+ name );
+            System.out.println(" Saved screenshot as "+ name );
         } catch( IOException e ) {
             System.out.println( "Saving screenshot failed: "+e );
         }
